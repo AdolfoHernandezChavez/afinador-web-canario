@@ -1,154 +1,120 @@
-:root {
-    --bg-color: #1a1a1a;
-    --card-bg: #2d2d2d;
-    --primary: #00ff88; /* Verde neón */
-    --danger: #ff4d4d;  /* Rojo */
-    --text: #ffffff;
-    --needle-color: #ff9500;
-}
-
 body {
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text);
+    background-color: #121212; /* Fondo muy oscuro */
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    margin: 0;
 }
 
-.app-container {
-    background-color: var(--card-bg);
+/* La tarjeta central */
+.card {
+    background: #1e1e1e;
     width: 90%;
-    max-width: 400px;
+    max-width: 350px;
+    padding: 30px;
     border-radius: 20px;
-    padding: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
     text-align: center;
+    border: 1px solid #333;
 }
 
-/* Selector de Instrumento */
-.selector-instrumento {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 20px;
+h2 { margin-top: 0; color: #888; font-size: 1.2rem; margin-bottom: 20px; }
+
+/* Botones de Instrumento */
+.toggle-container {
+    background: #121212;
+    padding: 5px;
+    border-radius: 50px;
+    display: inline-flex;
+    margin-bottom: 30px;
 }
 
-.selector-instrumento button {
+.toggle-container button {
     background: transparent;
-    border: 1px solid #555;
-    color: #888;
-    padding: 8px 16px;
-    border-radius: 20px;
+    border: none;
+    color: #666;
+    padding: 10px 20px;
+    border-radius: 50px;
     cursor: pointer;
+    font-weight: bold;
     transition: 0.3s;
 }
 
-.selector-instrumento button.active {
-    background: var(--primary);
+.toggle-container button.active {
+    background: #00ff88; /* Verde Neón */
     color: #000;
-    border-color: var(--primary);
-    font-weight: bold;
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
 }
 
-/* Pantalla del Afinador */
-.tuner-display {
-    background: #000;
-    border-radius: 15px;
-    padding: 20px;
-    margin-bottom: 20px;
-    border: 2px solid #333;
+/* Textos grandes */
+.display-area { margin-bottom: 20px; }
+.note { font-size: 5rem; font-weight: bold; line-height: 1; }
+.freq { color: #666; font-size: 1.2rem; margin-top: 5px; }
+.status { color: #888; margin-top: 5px; font-size: 0.9rem; }
+
+/* ZONA DE LA AGUJA (GAUGE) */
+.gauge-wrapper {
     position: relative;
+    width: 200px;
+    height: 100px; /* Semicírculo */
+    margin: 0 auto 30px auto;
     overflow: hidden;
 }
 
-.note-display {
-    font-size: 5rem;
-    font-weight: bold;
-    color: var(--primary);
-    text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
-}
-
-.frequency-display {
-    font-size: 1.2rem;
-    color: #888;
-    margin-bottom: 20px;
-}
-
-/* El Medidor y la Aguja */
-.meter-container {
-    width: 200px;
-    height: 100px; /* Semicírculo */
-    margin: 0 auto;
-    position: relative;
-    border-bottom: 2px solid #333;
-}
-
-.meter-scale {
+/* El arco gris de fondo */
+.gauge-bg {
     position: absolute;
     bottom: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 200px;
+    height: 100px;
+    background: #333;
+    border-radius: 100px 100px 0 0; /* Forma de arco */
 }
 
-.tick {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    width: 2px;
-    background: #555;
-    transform-origin: bottom center;
-}
-
-.tick-center { height: 20px; background: var(--primary); transform: translateX(-50%); }
-.tick-left { height: 10px; transform: translateX(-50%) rotate(-45deg); }
-.tick-right { height: 10px; transform: translateX(-50%) rotate(45deg); }
-
+/* La aguja */
 .needle {
     position: absolute;
     bottom: 0;
-    left: 50%;
+    left: 100px; /* Centro exacto */
     width: 4px;
     height: 90px;
-    background: var(--needle-color);
-    border-radius: 4px;
+    background: #ff4d4d; /* Rojo por defecto */
     transform-origin: bottom center; /* Rota desde abajo */
-    transform: translateX(-50%) rotate(0deg); /* 0deg es el centro */
-    transition: transform 0.1s ease-out; /* Movimiento suave */
-    z-index: 10;
+    transform: rotate(0deg); /* -90deg es izquierda, 90deg derecha */
+    transition: transform 0.1s ease-out, background 0.2s;
+    z-index: 2;
+    border-radius: 5px;
 }
 
-.needle::after {
-    content: '';
+.center-dot {
     position: absolute;
-    bottom: -5px;
-    left: -5px;
-    width: 14px;
-    height: 14px;
-    background: var(--needle-color);
+    bottom: -10px;
+    left: 90px;
+    width: 20px;
+    height: 20px;
+    background: #fff;
     border-radius: 50%;
+    z-index: 3;
 }
 
-/* Botón Start */
+/* Botón empezar */
 #btn-start {
     background: #333;
     color: white;
     border: none;
-    padding: 15px 30px;
-    border-radius: 50px;
+    width: 100%;
+    padding: 15px;
+    border-radius: 12px;
     font-size: 1.1rem;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    margin: 0 auto;
-    width: 100%;
+    transition: 0.2s;
 }
-
-#btn-start:hover {
-    background: #444;
-}
+#btn-start:hover { background: #444; }

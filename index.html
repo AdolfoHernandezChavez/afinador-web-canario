@@ -5,40 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Afinador Pro</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
 
-    <div class="app-container">
-        <header>
+    <div class="card">
+        <div class="header">
             <h2>Afinador Canario</h2>
-            <div class="selector-instrumento">
+            <div class="toggle-container">
                 <button id="btn-timple" class="active" onclick="cambiarInstrumento('timple')">Timple</button>
                 <button id="btn-guitarra" onclick="cambiarInstrumento('guitarra')">Guitarra</button>
             </div>
-        </header>
-
-        <div class="tuner-display">
-            <div class="note-display" id="note-name">--</div>
-            <div class="frequency-display" id="frequency">0.0 Hz</div>
-
-            <div class="meter-container">
-                <div class="meter-scale">
-                    <div class="tick tick-center"></div>
-                    <div class="tick tick-left"></div>
-                    <div class="tick tick-right"></div>
-                </div>
-                <div class="needle" id="needle"></div>
-            </div>
-            
-            <div class="status-text" id="status">Silencio...</div>
         </div>
 
-        <div class="controls">
-            <button id="btn-start" onclick="iniciarAudio()">
-                <span class="material-icons">mic</span> Empezar
-            </button>
+        <div class="display-area">
+            <div class="note" id="note-name">--</div>
+            <div class="freq" id="frequency">0.0 Hz</div>
+            <div class="status" id="status">Silencio...</div>
         </div>
+
+        <div class="gauge-wrapper">
+            <div class="gauge-bg"></div>
+            <div class="needle" id="needle"></div>
+            <div class="center-dot"></div>
+        </div>
+
+        <button id="btn-start" onclick="iniciarAudio()">
+            <span class="material-icons">mic</span> EMPEZAR
+        </button>
     </div>
 
     <script src="script.js"></script>
