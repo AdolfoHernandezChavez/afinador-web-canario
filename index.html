@@ -3,36 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Afinador Web Pro</title>
+    <title>Afinador Pro - Timple y Guitarra</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="https://unpkg.com/pitchfinder/lib/pitchfinder.js"></script>
 </head>
 <body>
 
-    <h1>Afinador_WEB</h1>
+    <div class="app-container">
+        <header>
+            <h2>Afinador Canario</h2>
+            <div class="selector-instrumento">
+                <button id="btn-timple" class="active" onclick="cambiarInstrumento('timple')">Timple</button>
+                <button id="btn-guitarra" onclick="cambiarInstrumento('guitarra')">Guitarra</button>
+            </div>
+        </header>
 
-    <div class="controls">
-        <select id="instrument-select">
-            <option value="guitarra">Guitarra (Estandard)</option>
-            <option value="bajo">Bajo (4 Cuerdas)</option>
-            <option value="timple">Timple Canario (5 Cuerdas)</option>
-        </select>
-        <div class="string-buttons" id="string-container"></div>
-    </div>
+        <div class="tuner-display">
+            <div class="note-display" id="note-name">--</div>
+            <div class="frequency-display" id="frequency">0.0 Hz</div>
 
-    <div class="tuner-display">
-        <div class="dial">
-            <div class="center-marker"></div>
-            <div class="needle" id="needle"></div>
+            <div class="meter-container">
+                <div class="meter-scale">
+                    <div class="tick tick-center"></div>
+                    <div class="tick tick-left"></div>
+                    <div class="tick tick-right"></div>
+                </div>
+                <div class="needle" id="needle"></div>
+            </div>
+            
+            <div class="status-text" id="status">Silencio...</div>
+        </div>
+
+        <div class="controls">
+            <button id="btn-start" onclick="iniciarAudio()">
+                <span class="material-icons">mic</span> Empezar
+            </button>
         </div>
     </div>
-
-    <div class="info-panel">
-        <p id="note-display">--</p>
-        <p id="freq-display">0 Hz</p>
-        <p id="status-msg"></p>
-    </div>
-
-    <button id="start-btn">ACTIVAR MICRÓFONO</button>
 
     <script src="script.js"></script>
 </body>
