@@ -1,0 +1,126 @@
+:root {
+    --bg-color: #2c3e50;
+    --text-color: #ecf0f1;
+    --accent-color: #e74c3c;
+    --success-color: #2ecc71;
+    --dial-bg: #ecf0f1;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 { margin-bottom: 10px; }
+
+.controls {
+    background: rgba(0,0,0,0.2);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+}
+
+select {
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.string-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+}
+
+.string-btn {
+    background: #34495e;
+    color: white;
+    border: 2px solid #bdc3c7;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.string-btn.active {
+    background: var(--accent-color);
+    border-color: white;
+    transform: scale(1.1);
+}
+
+.tuner-display {
+    position: relative;
+    width: 300px;
+    height: 150px;
+    margin-top: 20px;
+}
+
+.dial {
+    width: 300px;
+    height: 150px;
+    background: var(--dial-bg);
+    border-radius: 150px 150px 0 0;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.needle {
+    width: 4px;
+    height: 130px;
+    background: var(--accent-color);
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform-origin: bottom center;
+    transform: translateX(-50%) rotate(0deg);
+    transition: transform 0.1s ease-out;
+    z-index: 2;
+}
+
+.center-marker {
+    width: 2px;
+    height: 20px;
+    background: var(--success-color);
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+}
+
+.info-panel {
+    text-align: center;
+    margin-top: 20px;
+}
+
+#note-display { font-size: 4rem; font-weight: bold; margin: 0; }
+#freq-display { font-size: 1.2rem; color: #bdc3c7; }
+#status-msg { height: 20px; color: var(--success-color); font-weight: bold; }
+
+#start-btn {
+    margin-top: 30px;
+    padding: 15px 40px;
+    font-size: 1.2rem;
+    background-color: var(--success-color);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+#start-btn:disabled { background-color: #95a5a6; cursor: not-allowed; }
