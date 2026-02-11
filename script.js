@@ -2,28 +2,76 @@ let audioContext;
 let analyser;
 let isRunning = false;
 let currentInstrument = 'timple';
+let targetFrequency = 0; // La frecuencia de la cuerda elegida
 
-const notasTimple = [
-    { nota: 'D5', freq: 587.33 },
-    { nota: 'A4', freq: 440.00 },
-    { nota: 'E4', freq: 329.63 },
-    { nota: 'C5', freq: 523.25 },
-    { nota: 'G4', freq: 392.00 }
+// --- DATOS DE LAS CUERDAS ---
+// Orden: 1ª (abajo) a 5ª/6ª (arriba)
+const datosTimple = [
+    { num: '1ª', nota: 'D5', freq: 587.33 }, // Re
+    { num: '2ª', nota: 'A4', freq: 440.00 }, // La
+    { num: '3ª', nota: 'E4', freq: 329.63 }, // Mi
+    { num: '4ª', nota: 'C5', freq: 523.25 }, // Do
+    { num: '5ª', nota: 'G4', freq: 392.00 }  // Sol
 ];
 
-const notasGuitarra = [
-    { nota: 'E4', freq: 329.63 },
-    { nota: 'B3', freq: 246.94 },
-    { nota: 'G3', freq: 196.00 },
-    { nota: 'D3', freq: 146.83 },
-    { nota: 'A2', freq: 110.00 },
-    { nota: 'E2', freq: 82.41 }
+const datosGuitarra = [
+    { num: '1ª', nota: 'E4', freq: 329.63 }, // Mi
+    { num: '2ª', nota: 'B3', freq: 246.94 }, // Si
+    { num: '3ª', nota: 'G3', freq: 196.00 }, // Sol
+    { num: '4ª', nota: 'D3', freq: 146.83 }, // Re
+    { num: '5ª', nota: 'A2', freq: 110.00 }, // La
+    { num: '6ª', nota: 'E2', freq: 82.41 }   // Mi
 ];
+
+// Al cargar la página, generamos los botones del Timple
+window.onload = () => {
+    generarBotones('timple');
+};
 
 function cambiarInstrumento(inst) {
     currentInstrument = inst;
+    
+    // Cambiar botones visuales del menú
     document.getElementById('btn-timple').className = inst === 'timple' ? 'active' : '';
     document.getElementById('btn-guitarra').className = inst === 'guitarra' ? 'active' : '';
+    
+    // Regenerar los botones de las cuerdas
+    generarBotones(inst);
+}
+
+function generarBotones(inst) {
+    const contenedor = document.getElementById('cuerdas-container');
+    contenedor.innerHTML = ''; // Limpiar botones anteriores
+    
+    const datos = inst === 'timple' ? datosTimple : datosGuitarra;
+
+    datos.forEach((cuerda, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'string-btn';
+        btn.innerText = cuerda.num;
+        btn.onclick = () => seleccionarCuerda(index, inst);
+        contenedor.appendChild(btn);
+        
+        // Seleccionar la 1ª cuerda por defecto al cambiar instrumento
+        if (index === 0) btn.click();
+    });
+}
+
+function seleccionarCuerda(index, inst) {
+    const datos = inst === 'timple' ? datosTimple : datosGuitarra;
+    const cuerda = datos[index];
+    
+    targetFrequency = cuerda.freq; // FIJAMOS EL OBJETIVO
+    
+    // Actualizar UI visual (colores de botones)
+    const botones = document.querySelectorAll('.string-btn');
+    botones.forEach(b => b.classList.remove('selected'));
+    botones[index].classList.add('selected');
+
+    // Actualizar pantalla
+    document.getElementById('note-name').innerText = cuerda.nota;
+    document.getElementById('status').innerText = "Toca la " + cuerda.num + " cuerda...";
+    document.getElementById('note-name').style.color = "#fff"; // Reset color
 }
 
 async function iniciarAudio() {
@@ -33,83 +81,78 @@ async function iniciarAudio() {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
         analyser = audioContext.createAnalyser();
-        analyser.fftSize = 2048;
+        analyser.fftSize = 4096; // Mayor precisión
         
         const source = audioContext.createMediaStreamSource(stream);
         source.connect(analyser);
         
         isRunning = true;
-        document.getElementById('btn-start').innerHTML = "<span class='material-icons'>mic_off</span> DETENER";
-        document.getElementById('btn-start').onclick = function() { location.reload(); }; // Reset rápido
-        document.getElementById('btn-start').style.background = "#444"; 
+        document.getElementById('btn-start').innerHTML = "<span class='material-icons'>mic_off</span> PAUSAR";
+        document.getElementById('btn-start').onclick = function() { location.reload(); };
+        document.getElementById('btn-start').style.background = "var(--ocean-blue)"; 
 
-        actualizar();
+        bucleAfinacion();
     } catch (err) {
-        alert("¡Necesitamos el micrófono para afinar! Comprueba los permisos.");
+        alert("Error de micrófono: " + err);
     }
 }
 
-function actualizar() {
+function bucleAfinacion() {
     const buffer = new Float32Array(analyser.fftSize);
     analyser.getFloatTimeDomainData(buffer);
 
-    const freq = autoCorrelate(buffer, audioContext.sampleRate);
+    const freqDetectada = autoCorrelate(buffer, audioContext.sampleRate);
 
-    if (freq !== -1) {
-        mostrarDatos(freq);
+    if (freqDetectada !== -1) {
+        actualizarAguja(freqDetectada);
     } 
-    requestAnimationFrame(actualizar);
+    requestAnimationFrame(bucleAfinacion);
 }
 
-function mostrarDatos(freq) {
-    const notas = currentInstrument === 'timple' ? notasTimple : notasGuitarra;
-    
-    // Buscar nota más cercana
-    let notaCercana = notas[0];
-    let minDiff = Infinity;
+function actualizarAguja(freqInput) {
+    // Calculamos la diferencia solo con la cuerda SELECCIONADA
+    const diferencia = freqInput - targetFrequency;
 
-    notas.forEach(n => {
-        let diff = Math.abs(freq - n.freq);
-        if (diff < minDiff) {
-            minDiff = diff;
-            notaCercana = n;
-        }
-    });
+    // Mostrar frecuencia real
+    document.getElementById('frequency').innerText = freqInput.toFixed(1) + " Hz";
 
-    const diferencia = freq - notaCercana.freq;
-
-    // Actualizar UI
-    document.getElementById('note-name').innerText = notaCercana.nota;
-    document.getElementById('frequency').innerText = freq.toFixed(1) + " Hz";
-
-    // MOVER AGUJA
-    // Mapeamos +/- 10Hz a +/- 45 grados
-    let angulo = diferencia * 4; 
-    if (angulo > 90) angulo = 90;
-    if (angulo < -90) angulo = -90;
+    // Mover aguja
+    // Sensibilidad: +/- 15 Hz mueve la aguja al tope (45 grados)
+    let angulo = diferencia * 3; 
+    if (angulo > 60) angulo = 60;
+    if (angulo < -60) angulo = -60;
 
     const needle = document.getElementById('needle');
     needle.style.transform = `rotate(${angulo}deg)`;
 
-    // COLORES
+    // Feedback Visual
     const display = document.getElementById('note-name');
     const status = document.getElementById('status');
+    const margen = 1.0; // Hz de margen para darlo por bueno
 
-    // Margen de afinación (1 Hz)
-    if (Math.abs(diferencia) < 1.0) {
-        needle.style.background = "#00ff88"; // Verde
-        display.style.color = "#00ff88";
-        status.innerText = "¡AFINADO!";
-        status.style.color = "#00ff88";
+    if (Math.abs(diferencia) < margen) {
+        // AFINADO
+        needle.style.background = "var(--canary-yellow)";
+        display.style.color = "var(--canary-yellow)";
+        status.innerText = "¡PERFECTO!";
+        status.style.color = "var(--canary-yellow)";
     } else {
+        // DESAFINADO
         needle.style.background = "#ff4d4d"; // Rojo
-        display.style.color = "white";
-        status.innerText = diferencia < 0 ? "Sube (Aprieta)" : "Baja (Afloja)";
-        status.style.color = "#888";
+        display.style.color = "#fff";
+        
+        // Lógica de "Afloja" o "Aprieta"
+        if (diferencia < 0) {
+            status.innerText = "Aprieta (Sube)";
+            status.style.color = "#ff9999";
+        } else {
+            status.innerText = "Afloja (Baja)";
+            status.style.color = "#ff9999";
+        }
     }
 }
 
-// Algoritmo matemático de detección (YIN simplificado)
+// Algoritmo matemático (Autocorrelación) - NO TOCAR
 function autoCorrelate(buf, sampleRate) {
     let SIZE = buf.length;
     let rms = 0;

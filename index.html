@@ -3,25 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Afinador Pro</title>
+    <title>Afinador Canario Manual</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Mate+SC&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
 
     <div class="card">
+        <div class="flag-strip"></div>
+        <div class="guanche-pattern"></div>
+
         <div class="header">
-            <h2>Afinador Canario</h2>
+            <h2><span class="timple-icon"></span> Afinador Canario</h2>
+            
             <div class="toggle-container">
                 <button id="btn-timple" class="active" onclick="cambiarInstrumento('timple')">Timple</button>
                 <button id="btn-guitarra" onclick="cambiarInstrumento('guitarra')">Guitarra</button>
             </div>
         </div>
 
+        <div id="cuerdas-container" class="strings-bar">
+            </div>
+
         <div class="display-area">
             <div class="note" id="note-name">--</div>
-            <div class="freq" id="frequency">0.0 Hz</div>
-            <div class="status" id="status">Silencio...</div>
+            <div class="freq" id="frequency">Selecciona cuerda</div>
+            <div class="status" id="status">...</div>
         </div>
 
         <div class="gauge-wrapper">
@@ -31,7 +39,7 @@
         </div>
 
         <button id="btn-start" onclick="iniciarAudio()">
-            <span class="material-icons">mic</span> EMPEZAR
+            <span class="material-icons">mic</span> ESCUCHAR
         </button>
     </div>
 
