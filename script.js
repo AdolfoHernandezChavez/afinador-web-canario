@@ -2,28 +2,58 @@ let audioContext;
 let analyser;
 let isRunning = false;
 let currentInstrument = 'timple';
-let targetFrequency = 0; // La frecuencia de la cuerda elegida
+let targetFrequency = 0; 
 
-// --- DATOS DE LAS CUERDAS ---
-// Orden: 1ª (abajo) a 5ª/6ª (arriba)
+// --- BASE DE DATOS DE INSTRUMENTOS CANARIOS ---
+
+// 1. TIMPLE (Re-La-Mi-Do-Sol)
 const datosTimple = [
-    { num: '1ª', nota: 'D5', freq: 587.33 }, // Re
-    { num: '2ª', nota: 'A4', freq: 440.00 }, // La
-    { num: '3ª', nota: 'E4', freq: 329.63 }, // Mi
-    { num: '4ª', nota: 'C5', freq: 523.25 }, // Do
-    { num: '5ª', nota: 'G4', freq: 392.00 }  // Sol
+    { num: '1ª', nota: 'D5 (Re)', freq: 587.33 },
+    { num: '2ª', nota: 'A4 (La)', freq: 440.00 },
+    { num: '3ª', nota: 'E4 (Mi)', freq: 329.63 },
+    { num: '4ª', nota: 'C5 (Do)', freq: 523.25 },
+    { num: '5ª', nota: 'G4 (Sol)', freq: 392.00 }
 ];
 
+// 2. CONTRA (Timple Contra - Una 5ª más grave: Sol-Re-La-Fa-Do)
+const datosContra = [
+    { num: '1ª', nota: 'G4 (Sol)', freq: 392.00 },
+    { num: '2ª', nota: 'D4 (Re)', freq: 293.66 },
+    { num: '3ª', nota: 'A3 (La)', freq: 220.00 },
+    { num: '4ª', nota: 'F4 (Fa)', freq: 349.23 },
+    { num: '5ª', nota: 'C4 (Do)', freq: 261.63 }
+];
+
+// 3. GUITARRA (Mi-Si-Sol-Re-La-Mi)
 const datosGuitarra = [
-    { num: '1ª', nota: 'E4', freq: 329.63 }, // Mi
-    { num: '2ª', nota: 'B3', freq: 246.94 }, // Si
-    { num: '3ª', nota: 'G3', freq: 196.00 }, // Sol
-    { num: '4ª', nota: 'D3', freq: 146.83 }, // Re
-    { num: '5ª', nota: 'A2', freq: 110.00 }, // La
-    { num: '6ª', nota: 'E2', freq: 82.41 }   // Mi
+    { num: '1ª', nota: 'E4 (Mi)', freq: 329.63 },
+    { num: '2ª', nota: 'B3 (Si)', freq: 246.94 },
+    { num: '3ª', nota: 'G3 (Sol)', freq: 196.00 },
+    { num: '4ª', nota: 'D3 (Re)', freq: 146.83 },
+    { num: '5ª', nota: 'A2 (La)', freq: 110.00 },
+    { num: '6ª', nota: 'E2 (Mi)', freq: 82.41 }
 ];
 
-// Al cargar la página, generamos los botones del Timple
+// 4. BANDURRIA (La-Mi-Si-Fa#-Do#-Sol#)
+const datosBandurria = [
+    { num: '1ª', nota: 'A5 (La)', freq: 880.00 },
+    { num: '2ª', nota: 'E5 (Mi)', freq: 659.25 },
+    { num: '3ª', nota: 'B4 (Si)', freq: 493.88 },
+    { num: '4ª', nota: 'F#4 (Fa#)', freq: 369.99 },
+    { num: '5ª', nota: 'C#4 (Do#)', freq: 277.18 },
+    { num: '6ª', nota: 'G#3 (Sol#)', freq: 207.65 }
+];
+
+// 5. LAÚD (Igual que Bandurria pero una octava más grave)
+const datosLaud = [
+    { num: '1ª', nota: 'A4 (La)', freq: 440.00 },
+    { num: '2ª', nota: 'E4 (Mi)', freq: 329.63 },
+    { num: '3ª', nota: 'B3 (Si)', freq: 246.94 },
+    { num: '4ª', nota: 'F#3 (Fa#)', freq: 185.00 },
+    { num: '5ª', nota: 'C#3 (Do#)', freq: 138.59 },
+    { num: '6ª', nota: 'G#2 (Sol#)', freq: 103.83 }
+];
+
 window.onload = () => {
     generarBotones('timple');
 };
@@ -31,48 +61,55 @@ window.onload = () => {
 function cambiarInstrumento(inst) {
     currentInstrument = inst;
     
-    // Cambiar botones visuales del menú
-    document.getElementById('btn-timple').className = inst === 'timple' ? 'active' : '';
-    document.getElementById('btn-guitarra').className = inst === 'guitarra' ? 'active' : '';
+    // Resetear clases de botones
+    const botonesMenu = document.querySelectorAll('.toggle-container button');
+    botonesMenu.forEach(btn => btn.className = '');
     
-    // Regenerar los botones de las cuerdas
+    // Activar el botón pulsado
+    document.getElementById('btn-' + inst).className = 'active';
+    
+    // Regenerar las cuerdas
     generarBotones(inst);
 }
 
 function generarBotones(inst) {
     const contenedor = document.getElementById('cuerdas-container');
-    contenedor.innerHTML = ''; // Limpiar botones anteriores
+    contenedor.innerHTML = ''; 
     
-    const datos = inst === 'timple' ? datosTimple : datosGuitarra;
+    let datos;
+    if (inst === 'timple') datos = datosTimple;
+    else if (inst === 'contra') datos = datosContra;
+    else if (inst === 'guitarra') datos = datosGuitarra;
+    else if (inst === 'bandurria') datos = datosBandurria;
+    else if (inst === 'laud') datos = datosLaud;
 
     datos.forEach((cuerda, index) => {
         const btn = document.createElement('button');
         btn.className = 'string-btn';
         btn.innerText = cuerda.num;
-        btn.onclick = () => seleccionarCuerda(index, inst);
+        btn.onclick = () => seleccionarCuerda(index, datos); // Pasamos los datos directamente
         contenedor.appendChild(btn);
         
-        // Seleccionar la 1ª cuerda por defecto al cambiar instrumento
         if (index === 0) btn.click();
     });
 }
 
-function seleccionarCuerda(index, inst) {
-    const datos = inst === 'timple' ? datosTimple : datosGuitarra;
+function seleccionarCuerda(index, datos) {
     const cuerda = datos[index];
+    targetFrequency = cuerda.freq; 
     
-    targetFrequency = cuerda.freq; // FIJAMOS EL OBJETIVO
-    
-    // Actualizar UI visual (colores de botones)
+    // Actualizar botones (Visual)
     const botones = document.querySelectorAll('.string-btn');
     botones.forEach(b => b.classList.remove('selected'));
     botones[index].classList.add('selected');
 
     // Actualizar pantalla
-    document.getElementById('note-name').innerText = cuerda.nota;
-    document.getElementById('status').innerText = "Toca la " + cuerda.num + " cuerda...";
-    document.getElementById('note-name').style.color = "#fff"; // Reset color
+    document.getElementById('note-name').innerText = cuerda.nota.split(" ")[0]; // Solo la nota (ej: A4)
+    document.getElementById('status').innerText = "Afina: " + cuerda.nota;
+    document.getElementById('note-name').style.color = "#fff"; 
 }
+
+// ... EL RESTO DEL CÓDIGO (iniciarAudio, bucleAfinacion, etc.) SIGUE IGUAL ...
 
 async function iniciarAudio() {
     if (isRunning) return;
@@ -123,7 +160,7 @@ function actualizarAguja(freqInput) {
     if (angulo < -60) angulo = -60;
 
     const needle = document.getElementById('needle');
-    needle.style.transform = `rotate(${angulo}deg)`;
+    needle.style.transform = `translateX(-50%) rotate(${angulo}deg)`;
 
     // Feedback Visual
     const display = document.getElementById('note-name');

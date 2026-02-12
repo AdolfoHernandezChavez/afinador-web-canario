@@ -69,12 +69,15 @@ h2 {
 
 .timple-icon { font-size: 1.5rem; }
 
-/* Botones de Instrumento */
+/* Menú de instrumentos adaptativo */
 .toggle-container {
     background: #111;
-    padding: 5px;
-    border-radius: 50px;
-    display: inline-flex;
+    padding: 8px;
+    border-radius: 20px; /* Bordes menos redondos para acomodar filas */
+    display: flex;
+    flex-wrap: wrap; /* Importante: permite que los botones bajen de línea */
+    justify-content: center;
+    gap: 8px;
     margin-bottom: 20px;
     border: 1px solid #333;
 }
@@ -83,12 +86,14 @@ h2 {
     background: transparent;
     border: none;
     color: #888;
-    padding: 8px 20px;
-    border-radius: 50px;
+    padding: 6px 12px; /* Un poco más pequeños para que quepan */
+    border-radius: 15px;
     cursor: pointer;
     font-weight: 600;
     font-family: 'Montserrat', sans-serif;
     transition: 0.3s;
+    font-size: 0.85rem; /* Texto un pelín más pequeño */
+    flex-grow: 1; /* Para que ocupen el espacio disponible */
 }
 
 .toggle-container button.active {
@@ -111,54 +116,64 @@ h2 {
 .freq { color: #aaa; font-size: 1.1rem; margin-top: 5px; font-weight: 300; }
 .status { color: var(--canary-yellow); margin-top: 5px; font-size: 0.9rem; font-style: italic; }
 
+
+
 /* Medidor (Gauge) */
 .gauge-wrapper {
     position: relative;
-    width: 220px;
-    height: 110px;
-    margin: 0 auto 25px auto;
-    overflow: hidden;
+    width: 200px; /* Ancho exacto del arco */
+    height: 100px; /* Alto exacto del semicírculo */
+    margin: 0 auto 35px auto; /* Un poco más de margen abajo para el punto */
+    /* Quitamos overflow: hidden para que se vea el punto central abajo */
 }
 
 .gauge-bg {
     position: absolute;
     bottom: 0;
-    left: 10px;
-    width: 200px;
-    height: 100px;
+    left: 0; /* Sin desplazamiento extraño */
+    width: 100%;
+    height: 100%;
     background: #2a2a2a;
-    border-radius: 100px 100px 0 0;
+    border-radius: 100px 100px 0 0; /* Semicírculo perfecto */
     border: 2px solid #444;
     border-bottom: none;
     box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
 }
 
-/* Aguja estilo "Canario" */
+/* Aguja perfectamente centrada */
 .needle {
     position: absolute;
     bottom: 0;
-    left: 110px; /* Centro (10px offset + 100px) */
+    left: 50%; /* 1. Sitúa el borde izquierdo en la mitad exacta */
     width: 4px;
     height: 95px;
-    background: var(--canary-yellow); /* Aguja Amarilla */
-    transform-origin: bottom center;
-    transform: rotate(0deg);
-    transition: transform 0.15s cubic-bezier(0.4, 2.5, 0.4, 0.8), background 0.2s; /* Efecto rebote suave */
+    background: var(--canary-yellow);
+    border-radius: 4px 4px 0 0;
     z-index: 2;
-    border-radius: 4px;
     box-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
+    
+    /* LA CLAVE DEL CENTRADO: */
+    transform-origin: bottom center; /* Gira desde abajo al centro */
+    /* translateX(-50%) mueve la aguja la mitad de su propio ancho a la izquierda para centrarla */
+    transform: translateX(-50%) rotate(0deg); 
+    
+    transition: transform 0.15s cubic-bezier(0.4, 2.5, 0.4, 0.8), background 0.2s;
 }
 
+/* Punto central perfectamente centrado */
 .center-dot {
     position: absolute;
-    bottom: -10px;
-    left: 100px;
+    bottom: -12px; /* Ajuste vertical */
+    left: 50%; /* 1. Al centro */
     width: 24px;
     height: 24px;
     background: var(--white);
     border: 4px solid var(--ocean-blue);
     border-radius: 50%;
     z-index: 3;
+    /* 2. Corregir el centrado restando la mitad de su ancho */
+    transform: translateX(-50%);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.3);
 }
 
 /* Botón Principal */
