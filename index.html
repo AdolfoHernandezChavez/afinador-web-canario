@@ -1,80 +1,53 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>Afinador de Timple, Guitarra y Contra | Afinador Canario Online</title>
-    
-    <meta name="description" content="Afina tu Timple, Contra, Laúd, Bandurria o Guitarra gratis y online. Herramienta precisa con micrófono para músicos de Canarias. Sin descargas.">
-    
-    <meta name="keywords" content="afinador timple, afinador canario, afinar contra, afinar guitarra, musica canaria, afinador online gratis">
-    
-    <meta property="og:title" content="Afinador Canario Profesional Online">
-    <meta property="og:description" content="La herramienta definitiva para afinar tu Timple, Contra, Laúd y más. Gratis y preciso.">
-    <meta property="og:type" content="website">
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Mate+SC&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🇮🇨</text></svg>">
-</head>
-<div class="seo-info">
-    <h3>Afinador Canario Online para Parrandas</h3>
-    <p>
-        Bienvenido al <strong>Afinador pal Parrandeo</strong>, la herramienta digital gratuita más precisa para afinar instrumentos de cuerda pulsada de las <strong>Islas Canarias</strong>. 
-        Diseñado para músicos de parrandas, romerías y bailes de taifas.
-    </p>
-    <div class="seo-grid">
-        <div>
-            <h4>🎵 Afinador de Timple</h4>
-            <p>Afinación estándar en Re (D), La (A), Mi (E), Do (C), Sol (G). Detecta la frecuencia exacta con el micrófono de tu móvil.</p>
-        </div>
-        <div>
-            <h4>🎶 Contra, Laúd y Bandurria</h4>
-            <p>Incluye modos para <strong>Contra</strong> (una quinta más grave), <strong>Laúd</strong> y <strong>Bandurria</strong>. Perfecto para completar la parranda.</p>
-        </div>
-    </div>
-    <p class="copyright">© 2026 Afinador Canario | Hecho con ❤️ y mojo picón</p>
-</div>
 <body>
+    <main class="main-container">
+        <div class="card">
+            <div class="flag-strip"></div>
+            <div class="guanche-pattern"></div>
 
-    <div class="card">
-        <div class="flag-strip"></div>
-        <div class="guanche-pattern"></div>
-
-        <div class="header">
-            <h1><span class="timple-icon"></span> Afinador Canario</h1>
-            
-            <div class="toggle-container">
-                <button id="btn-timple" class="active" onclick="cambiarInstrumento('timple')">Timple</button>
-                <button id="btn-contra" onclick="cambiarInstrumento('contra')">Contra</button>
-                <button id="btn-guitarra" onclick="cambiarInstrumento('guitarra')">Guitarra</button>
-                <button id="btn-bandurria" onclick="cambiarInstrumento('bandurria')">Bandurria</button>
-                <button id="btn-laud" onclick="cambiarInstrumento('laud')">Laúd</button>
-            </div>
-        </div>
-
-        <div id="cuerdas-container" class="strings-bar">
+            <div class="header">
+                <h1><span class="timple-icon">🎵</span> Afinador Canario</h1>
+                
+                <div class="toggle-container">
+                    <button id="btn-timple" class="active" onclick="cambiarInstrumento('timple')">Timple</button>
+                    <button id="btn-contra" onclick="cambiarInstrumento('contra')">Contra</button>
+                    <button id="btn-guitarra" onclick="cambiarInstrumento('guitarra')">Guitarra</button>
+                    <button id="btn-bandurria" onclick="cambiarInstrumento('bandurria')">Bandurria</button>
+                    <button id="btn-laud" onclick="cambiarInstrumento('laud')">Laúd</button>
+                </div>
             </div>
 
-        <div class="display-area">
-            <div class="note" id="note-name">--</div>
-            <div class="freq" id="frequency">Selecciona cuerda</div>
-            <div class="status" id="status">...</div>
-        </div>
+            <div id="cuerdas-container" class="strings-bar">
+                </div>
 
-        <div class="gauge-wrapper">
-            <div class="gauge-bg"></div>
-            <div class="needle" id="needle"></div>
-            <div class="center-dot"></div>
-        </div>
+            <div class="display-area">
+                <div class="note" id="note-name">--</div>
+                <div class="freq" id="frequency">Selecciona cuerda</div>
+                <div class="status" id="status">...</div>
+            </div>
 
-        <button id="btn-start" onclick="iniciarAudio()">
-            <span class="material-icons">mic</span> ESCUCHAR
-        </button>
-    </div>
+            <div class="gauge-wrapper">
+                <div class="gauge-bg"></div>
+                <div class="needle" id="needle"></div>
+                <div class="center-dot"></div>
+            </div>
+
+            <button id="btn-start" onclick="iniciarAudio()">
+                <span class="material-icons">mic</span> ESCUCHAR
+            </button>
+        </div>
+    </main>
+
+    <footer class="seo-footer">
+        <div class="seo-content">
+            <h3>Afinador Canario Online para Parrandas</h3>
+            <p>
+                Herramienta gratuita y precisa para afinar <strong>Timple, Contra, Laúd, Bandurria y Guitarra</strong>. Ideal para músicos de parrandas y romerías en Canarias. Funciona con el micrófono de tu móvil sin descargas.
+            </p>
+             <p class="copyright">© 2024 Afinadorpalparrandeo | Hecho con ❤️ y mojo picón</p>
+        </div>
+    </footer>
 
     <script src="script.js"></script>
+</body>
 </body>
 </html>
