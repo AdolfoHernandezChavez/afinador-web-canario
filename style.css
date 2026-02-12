@@ -10,11 +10,11 @@ body {
     background: radial-gradient(circle at center, #2b3240 0%, #121212 100%);
     color: var(--white);
     font-family: 'Montserrat', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
     margin: 0;
+    /* NUEVA ESTRUCTURA FLEX VERTICAL */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Asegura que ocupe toda la pantalla */
 }
 
 /* Tarjeta Principal */
@@ -258,3 +258,53 @@ h2 {
 .seo-info h3 { color: var(--canary-yellow); margin-bottom: 10px; }
 .seo-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; max-width: 800px; margin: 0 auto; }
 .seo-grid div { min-width: 200px; }
+
+
+/* Nuevo contenedor que centra la tarjeta en el espacio disponible */
+.main-container {
+    flex: 1; /* Ocupa todo el espacio libre entre arriba y abajo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0; /* Un poco de aire si la pantalla es muy bajita */
+    width: 100%;
+}
+
+/* Estilos para el pie de página SEO discreto */
+.seo-footer {
+    background: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+    padding: 15px 20px;
+    text-align: center;
+    border-top: 1px solid #333;
+    font-size: 0.85rem;
+    color: #aaa;
+    width: 100%;
+    box-sizing: border-box; /* Para que el padding no ensanche la web */
+}
+
+.seo-content {
+    max-width: 800px; /* Que el texto no se estire demasiado en PC */
+    margin: 0 auto;
+}
+
+.seo-footer h3 {
+    margin: 0 0 10px 0;
+    font-family: 'Mate SC', serif;
+    color: var(--canary-yellow);
+    font-size: 1.1rem;
+}
+
+.seo-footer p {
+    margin: 5px 0;
+    line-height: 1.4;
+}
+
+.seo-footer strong {
+    color: #ccc;
+}
+
+.copyright {
+    margin-top: 15px !important;
+    font-size: 0.75rem;
+    opacity: 0.6;
+}
